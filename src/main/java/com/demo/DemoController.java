@@ -1,24 +1,36 @@
 package com.demo;
 
-import org.springframework.stereotype.Controller;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import com.demo.entity.Employee;
+import com.demo.service.DemoService;
+
+@RestController
 public class DemoController {
 
-	
-	@GetMapping("/hello")
-	public String getHello() {
-		return "Hello";
-	}
+	@Autowired
+	DemoService demoservice;
 	
 	@GetMapping("/hi")
-	public String getHi() {
-		return "hi";
+	public String getHello() {
+		return "redirect:/swagger-ui/index.html";
 	}
 	
-	 @GetMapping("/")
+	@GetMapping("/")
+	public String getHi() {
+		return demoservice.getAll().toString();
+	}
+	
+	 @GetMapping("/hello")
 	    public String home() {
-	        return "home";  // Thymeleaf template name (home.html)
+	        return "hello";  
 	    }
+	 
+	 @GetMapping("/email/{email}")
+	 public Employee getEmployee(@PathVariable String email) {
+		 return demoservice.getEmail(email);
+	 }
 }
